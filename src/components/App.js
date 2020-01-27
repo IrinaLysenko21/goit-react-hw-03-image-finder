@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { clearConfigCache } from 'prettier';
 import getImagesByQuery from '../services/api';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -25,13 +26,15 @@ class App extends Component {
     isLoading: false,
     isModalOpen: false,
     imageToOpen: null,
+    newSearch: 1,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { searchQuery, pageNumber } = this.state;
+    const { searchQuery, pageNumber, newSearch } = this.state;
     if (
       prevState.searchQuery !== searchQuery ||
-      prevState.pageNumber !== pageNumber
+      prevState.pageNumber !== pageNumber ||
+      prevState.newSearch !== newSearch
     ) {
       this.onSearch(searchQuery, pageNumber);
     }
@@ -41,11 +44,11 @@ class App extends Component {
     this.setState({ isLoading: true });
 
     await getImagesByQuery(searchQuery, pageNumber)
-      .then(({ data }) =>
+      .then(res => {
         this.setState(prevState => ({
-          images: [...prevState.images, ...mapper(data.hits)],
-        })),
-      )
+          images: [...prevState.images, ...mapper(res.data.hits)],
+        }));
+      })
       .catch(error => {
         throw new Error(error);
       })
@@ -58,7 +61,14 @@ class App extends Component {
   };
 
   onSubmitSearchbar = query => {
-    this.setState({ searchQuery: query, images: [], pageNumber: 1 });
+    this.setState(prevState => {
+      return {
+        searchQuery: query,
+        images: [],
+        pageNumber: 1,
+        newSearch: !prevState.newSearch,
+      };
+    });
   };
 
   onLoadMore = () => {
