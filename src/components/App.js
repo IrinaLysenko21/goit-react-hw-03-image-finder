@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { clearConfigCache } from 'prettier';
 import getImagesByQuery from '../services/api';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -21,7 +20,7 @@ const mapper = images => {
 class App extends Component {
   state = {
     images: [],
-    searchQuery: 'hello',
+    searchQuery: '',
     pageNumber: 1,
     isLoading: false,
     isModalOpen: false,
