@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import getImagesByQuery from '../services/api';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
+import ArrowSign from './ArrowSign/ArrowSign';
 import Button from './Button/Button';
 import Loader from './Loader/Loader';
 import Modal from './Modal/Modal';
@@ -99,8 +100,13 @@ class App extends Component {
           <Modal onCloseModal={this.onCloseModal} imageToOpen={imageToOpen} />
         )}
         <Searchbar onSubmit={this.onSubmitSearchbar} />
-        <ImageGallery images={images} onClick={this.onClickOnGalleryItem} />
-        {images.length > 0 && <Button onClick={this.onLoadMore} />}
+        {images.length === 0 && <ArrowSign />}
+        {images.length > 0 && (
+          <>
+            <ImageGallery images={images} onClick={this.onClickOnGalleryItem} />
+            <Button onClick={this.onLoadMore} />
+          </>
+        )}
       </div>
     );
   }

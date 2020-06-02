@@ -8,8 +8,6 @@ class Modal extends Component {
     imageToOpen: PropTypes.string.isRequired,
   };
 
-  state = {};
-
   componentDidMount() {
     window.addEventListener('keydown', this.closeOnEscape);
   }
